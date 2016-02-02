@@ -1,0 +1,58 @@
+@font-face {
+	font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Quicksand Regular'), local('Quicksand-Regular'), url(fonts/Quicksand.ttf) format('truetype');
+
+}
+
+body {
+	background: #FFFFFF;
+}
+
+p,a,h1,h2,h3 {
+	font-family: Quicksand;
+	color: #000000;
+}
+
+h1 {
+	font-size: 40px;
+	font-weight: bold;
+}
+
+h2 {
+	font-size: 32px;
+}
+
+h3 {
+	font-size: 24px;
+}
+
+p, li, a {
+	line-height: 2em;
+	font-size: 1.2em;
+}
+
+#header {
+    margin-top: 30px;
+}
+
+#header h1 {
+    display: inline-block;
+}
+
+#header img {
+    height: 80px;
+}
+
+#content {
+    margin-top: 50px;
+}
+
+#content .radio-station {
+    margin-bottom: 50px;
+}
+
+#content .radio-station img {
+    max-height: 100px;
+}
