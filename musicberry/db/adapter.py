@@ -39,4 +39,3 @@ class RadioStation:
         conn.execute("INSERT INTO RADIO_STATIONS (NAME,URL,IMAGE_URL) \
                       VALUES ('" + self.name + "', '" + self.url + "', '" + self.image_url + "')")
         conn.commit()
-

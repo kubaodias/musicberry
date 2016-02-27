@@ -3,3 +3,4 @@
 !.gitignore
 *.iml
 musicberry.db
+__pycache__
