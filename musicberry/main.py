@@ -1,5 +1,16 @@
-# MusicBerry application state processing functions
+"""MusicBerry
 
+Usage:
+musicberry server (start|stop|restart)
+musicberry control (play|pause|menu|left|right|up|down)
+musicberry (-h|--help)
+musicberry (-v|--version)
+
+Options:
+  -h --help     Show this screen.
+  -v --version  Show application version.
+"""
+from docopt import docopt
 import logging
 import os.path
 import sys
@@ -17,18 +28,15 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(fileHandler)
 
 if __name__ == '__main__':
-    server = MusicBerryServer('/tmp/musicberry.pid')
-    if len(sys.argv) == 2:
-        if 'start' == sys.argv[1]:
+    arguments = docopt(__doc__, version='MusicBerry 1.0')
+
+    if arguments['server']:
+        server = MusicBerryServer('/tmp/musicberry.pid')
+        if arguments['start']:
             server.start()
-        elif 'stop' == sys.argv[1]:
+        elif arguments['stop']:
             server.stop()
-        elif 'restart' == sys.argv[1]:
+        elif arguments['restart']:
             server.restart()
-        else:
-            print("Unknown command")
-            sys.exit(2)
-        sys.exit(0)
-    else:
-        print("usage: musicberry start|stop|restart")
-        sys.exit(2)
+    elif arguments['control']:
+        print("CONTROL")
