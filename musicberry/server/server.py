@@ -55,19 +55,25 @@ class MusicBerryApp:
             self.volume -= 1
 
     def play(self):
-        radioStation = self.radioStations[self.index]
-        logger.info("Play '", radioStation.name, "'", "(", radioStation.url, ")")
-        self.player = subprocess.Popen(["cvlc", radioStation.url], stdout=subprocess.PIPE, shell=False)
+        if (self.player == None):
+            radioStation = self.radioStations[self.index]
+            logger.info("Play '" + radioStation.name + "' (" + radioStation.url + ")")
+            self.player = subprocess.Popen(["cvlc", radioStation.url], stdout=subprocess.PIPE, shell=False)
+        else:
+            logger.debug("Already playing...")
 
     def pause(self):
-        self.player.terminate()
-        self.player = None
+        if (self.player != None):
+            self.player.terminate()
+            self.player = None
+        else:
+            logger.debug("Already paused...")
 
 
 class MusicBerryServer(Daemon):
     def run(self):
-        dbConn = DbConnection()
-        app = MusicBerryApp(dbConn)
-        webApp = MusicBerryWebApp(app)
+        self.dbConn = DbConnection()
+        self.app = MusicBerryApp(self.dbConn)
+        self.webApp = MusicBerryWebApp(self.app)
         while True:
             time.sleep(1)

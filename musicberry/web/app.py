@@ -9,6 +9,7 @@ import musicberry.server.api as MusicBerryApi
 logger = logging.getLogger('musicberry')
 
 class MusicBerryWebApp:
+    PORT = 5000
     def __init__(self, app):
         logger.info("* Initializing MusicBerry web application...")
         AppView.init(app)
@@ -28,5 +29,7 @@ class AppView(FlaskView):
 
     @route('/api/v1/controller/', methods=['POST'])
     def api_controller(self):
-        MusicBerryApi.process(request.json, AppView.app)
+        jsonData = request.json
+        logger.debug("POST /api/v1/controller " + str(jsonData))
+        MusicBerryApi.process(jsonData, AppView.app)
         return ''

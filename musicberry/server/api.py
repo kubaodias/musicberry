@@ -3,9 +3,7 @@
 def process(data, app):
     print("\nHTTP request:", data)
     event = data['event']
-    if event == 'volume':
-        app.volume_up()
-    elif event == 'play':
+    if event == 'play':
         app.play()
     elif event == 'pause':
         app.pause()

@@ -2,7 +2,7 @@
 
 Usage:
 musicberry server (start|stop|restart)
-musicberry control (play|pause|menu|left|right|up|down)
+musicberry control (play|pause|menu|next|prev|up|down)
 musicberry (-h|--help)
 musicberry (-v|--version)
 
@@ -18,6 +18,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from musicberry.server.server import MusicBerryServer
+from musicberry.web.client import MusicBerryClient
 
 logger = logging.getLogger('musicberry')
 formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
@@ -32,11 +33,22 @@ if __name__ == '__main__':
 
     if arguments['server']:
         server = MusicBerryServer('/tmp/musicberry.pid')
+
         if arguments['start']:
             server.start()
         elif arguments['stop']:
             server.stop()
         elif arguments['restart']:
             server.restart()
+
     elif arguments['control']:
-        print("CONTROL")
+        client = MusicBerryClient()
+
+        if arguments['play']:
+            client.request({'event': 'play'})
+        elif arguments['pause']:
+            client.request({'event': 'pause'})
+        elif arguments['next']:
+            client.request({'event': 'next'})
+        elif arguments['prev']:
+            client.request({'event': 'prev'})
