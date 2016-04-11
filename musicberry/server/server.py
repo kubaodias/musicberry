@@ -47,11 +47,18 @@ class MusicBerryApp:
 
     def volume_up(self):
         if self.volume < 100:
-            self.volume += 1
+            self.volume += 5
+            self.volume_set()
 
     def volume_down(self):
         if self.volume > 0:
-            self.volume -= 1
+            self.volume -= 5
+            self.volume_set()
+
+    def volume_set(self):
+        volume_value = str(self.volume) + "%"
+        self.logger.debug("Set volume to " + volume_value)
+        subprocess.Popen(["pactl", "set-sink-volume", "0", volume_value], stdout=subprocess.PIPE, shell=False)
 
     def play(self):
         if (self.player == None):
@@ -63,6 +70,7 @@ class MusicBerryApp:
 
     def pause(self):
         if (self.player != None):
+            self.logger.debug("Pause")
             self.player.terminate()
             self.player = None
         else:
