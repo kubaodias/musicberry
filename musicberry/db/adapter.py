@@ -5,7 +5,7 @@ import sqlite3
 class DbConnection:
 
     def __init__(self):
-        self.conn = sqlite3.connect('musicberry.db')
+        self.conn = sqlite3.connect('/var/lib/musicberry.db')
         self.conn.execute('''CREATE TABLE IF NOT EXISTS RADIO_STATIONS
                             (NAME      TEXT   PRIMARY_KEY   NOT NULL,
                              URL       TEXT                 NOT NULL,

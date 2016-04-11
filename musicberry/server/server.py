@@ -12,8 +12,6 @@ from musicberry.db.adapter import DbConnection
 from musicberry.server.daemon import Daemon
 from musicberry.web.app import MusicBerryWebApp
 
-logger = logging.getLogger('musicberry')
-
 class MusicBerryApp:
     dbConn = None
 
@@ -23,8 +21,9 @@ class MusicBerryApp:
         self.dbConn = dbConn
         self.radioStations = dbConn.radio_stations()
         self.player = None
+        self.logger = logging.getLogger('musicberry')
 
-        logger.info("* Initializing MusicBerry application...")
+        self.logger.info("* Initializing MusicBerry application...")
 
     def radio_stations(self):
         radioStationsJson = [rs.__dict__ for rs in self.radioStations]
@@ -57,23 +56,36 @@ class MusicBerryApp:
     def play(self):
         if (self.player == None):
             radioStation = self.radioStations[self.index]
-            logger.info("Play '" + radioStation.name + "' (" + radioStation.url + ")")
+            self.logger.info("Play '" + radioStation.name + "' (" + radioStation.url + ")")
             self.player = subprocess.Popen(["cvlc", radioStation.url], stdout=subprocess.PIPE, shell=False)
         else:
-            logger.debug("Already playing...")
+            self.logger.debug("Already playing...")
 
     def pause(self):
         if (self.player != None):
             self.player.terminate()
             self.player = None
         else:
-            logger.debug("Already paused...")
+            self.logger.debug("Already paused...")
 
 
 class MusicBerryServer(Daemon):
+    def __init__(self, pidfile):
+        self.init_logger()
+        super(MusicBerryServer, self).__init__(pidfile)
+
     def run(self):
         self.dbConn = DbConnection()
         self.app = MusicBerryApp(self.dbConn)
         self.webApp = MusicBerryWebApp(self.app)
         while True:
             time.sleep(1)
+
+    def init_logger(self):
+        self.logger = logging.getLogger('musicberry')
+        formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+        fileHandler = logging.FileHandler('/var/log/musicberry.log')
+        fileHandler.setFormatter(formatter)
+        fileHandler.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(fileHandler)

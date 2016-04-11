@@ -11,3 +11,7 @@ def process(data, app):
         app.next()
     elif event == 'prev':
         app.prev()
+    elif event == 'up':
+        app.volume_up()
+    elif event == 'down':
+        app.volume_down()
