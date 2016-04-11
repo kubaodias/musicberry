@@ -21,9 +21,9 @@ class AppView(FlaskView):
         cls.logger = logging.getLogger('musicberry')
         cls.app = app
         cls.register(webApp, route_base='/')
-        webApp.run(port = MusicBerryWebApp.PORT)
+        webApp.run(host = '0.0.0.0', port = MusicBerryWebApp.PORT)
 
-    @route('/', methods=['GET'])
+    @route('/admin', methods=['GET'])
     def index(self):
         return render_template('index.html', radio_stations = AppView.app.radio_stations())
 
