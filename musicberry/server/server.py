@@ -64,7 +64,7 @@ class MusicBerryApp:
         if (self.player == None):
             radioStation = self.radioStations[self.index]
             self.logger.info("Play '" + radioStation.name + "' (" + radioStation.url + ")")
-            self.player = subprocess.Popen(["cvlc", radioStation.url], stdout=subprocess.PIPE, shell=False)
+            self.player = subprocess.Popen(["vlc-wrapper", radioStation.url, "-I", "dummy"], stdout=subprocess.PIPE, shell=False)
         else:
             self.logger.debug("Already playing...")
 
