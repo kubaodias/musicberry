@@ -1,0 +1,12 @@
+#!/bin/bash
+
+EVENT=$1
+
+SERVER="http://localhost:8080"
+
+if [ "$EVENT" == "" ]; then
+    echo "Usage: $0 (play|pause|menu|next|prev|up|down)"
+    exit 1
+fi
+
+curl -XPOST ${SERVER}/api/v1/controller/ -H "Content-Type: application/json" -d "{\"event\": \"$EVENT\"}"

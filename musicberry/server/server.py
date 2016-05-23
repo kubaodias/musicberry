@@ -1,6 +1,6 @@
 # MusicBerry application state processing functions
 
-import logging
+import logging, logging.handlers
 import os.path
 import subprocess
 import sys
@@ -47,18 +47,18 @@ class MusicBerryApp:
 
     def volume_up(self):
         if self.volume < 100:
-            self.volume += 5
+            self.volume += 2
             self.volume_set()
 
     def volume_down(self):
         if self.volume > 0:
-            self.volume -= 5
+            self.volume -= 2
             self.volume_set()
 
     def volume_set(self):
         volume_value = str(self.volume) + "%"
         self.logger.debug("Set volume to " + volume_value)
-        subprocess.Popen(["pactl", "set-sink-volume", "0", volume_value], stdout=subprocess.PIPE, shell=False)
+        subprocess.Popen(["amixer", "set", "PCM", volume_value], stdout=subprocess.PIPE, shell=False)
 
     def play(self):
         if (self.player == None):
@@ -91,9 +91,14 @@ class MusicBerryServer(Daemon):
 
     def init_logger(self):
         self.logger = logging.getLogger('musicberry')
-        formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
-        fileHandler = logging.FileHandler('/var/log/musicberry.log')
-        fileHandler.setFormatter(formatter)
-        fileHandler.setLevel(logging.DEBUG)
         self.logger.setLevel(logging.DEBUG)
-        self.logger.addHandler(fileHandler)
+        stdoutHandler = logging.StreamHandler(sys.stdout)
+        stdoutFormatter = logging.Formatter('%(message)s')
+        stdoutHandler.setFormatter(stdoutFormatter)
+        fileHandler = logging.FileHandler('/home/pi/musicberry/musicberry/musicberry.log')
+        fileFormatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+        fileHandler.setFormatter(fileFormatter)
+        handlers = [fileHandler, stdoutHandler]
+        for handler in handlers:
+            handler.setLevel(logging.DEBUG)
+            self.logger.addHandler(handler)

@@ -1,12 +1,14 @@
 """MusicBerry
 
 Usage:
-musicberry server (start|stop|restart)
+musicberry server start [-d|--daemon]
+musicberry server stop
 musicberry control (play|pause|menu|next|prev|up|down)
 musicberry (-h|--help)
 musicberry (-v|--version)
 
 Options:
+  -d --daemon   Run as a daemon.
   -h --help     Show this screen.
   -v --version  Show application version.
 """
@@ -26,7 +28,11 @@ if __name__ == '__main__':
         server = MusicBerryServer('/tmp/musicberry.pid')
 
         if arguments['start']:
-            server.start()
+            if arguments['--daemon']:
+                server.start()
+            else:
+                # run thread function
+                server.run()
         elif arguments['stop']:
             server.stop()
         elif arguments['restart']:

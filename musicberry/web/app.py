@@ -7,7 +7,7 @@ from flask.ext.classy import FlaskView, route
 import musicberry.server.api as MusicBerryApi
 
 class MusicBerryWebApp:
-    PORT = 80
+    PORT = 8080
     def __init__(self, app):
         self.logger = logging.getLogger('musicberry')
         self.logger.info("* Initializing MusicBerry web application...")

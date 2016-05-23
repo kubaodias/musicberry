@@ -2,4 +2,5 @@
 .*
 !.gitignore
 *.iml
+*.log
 __pycache__
